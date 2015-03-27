@@ -1,0 +1,9 @@
+[default]
+projectname = django,
+
+[acp]
+.html = html.acp,django_html.acp,
+
+[highlight]
+.html = djangotmp
+

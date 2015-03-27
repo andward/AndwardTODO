@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block todo %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script language="javascript" type="text/javascript" src="/static/ajax_task.js"></script>
+<div class="task_area">
+	<div class="task_form" id='debug-task-form'>
+		<div class='topic'><b>TODO</b></div>
+		<div class="task_list_top" id='debug-top-task'>
+			{% for item in task_top %}
+				<li class='task_li'>
+					<div class="task_todo"></div>
+					<div class="task_top"></div>
+					<div class="task_container">
+						<span class="task_id">{{item.id}}</span>
+						<span class="task_time">{{item.time|date:"d M Y"}}</span>
+						<div class="task_tag circle"><span>{{item.tag}}</span></div>
+						<span class="task_author">{{item.name}}</span>
+						<span class="task_content">{{item.task}}</span>
+					</div>
+				</li>
+			{% endfor %}
+			<li class='task_place_holder'></li>
+		</div>
+		<div class="task_list_todo" id='debug-todo-task'>
+			{% for item in task_todo %}
+				<li class="task_li">
+					<div class="task_todo"></div>
+					<div class="task_to_top"></div>
+					<div class="task_container">
+						<span class="task_id">{{item.id}}</span>
+						<span class="task_time">{{item.time|date:"d M Y"}}</span>
+						<div class="task_tag circle"><span>{{item.tag}}</span></div>
+						<span class="task_author">{{item.name}}</span>
+						<span class="task_content">{{item.task}}</span>
+					</div>
+				</li>
+			{% endfor %}
+			<li class='task_place_holder'></li>
+		</div>
+		<div class='topic' style='margin-top:20px'>
+			<div style='float:left'>DONE</div>
+			<div class='all_done'>
+				<div class='pull_down'></div>
+			</div>
+		</div>
+		<div class="task_list_done" id='debug-done-task'>
+			{% for item in task_done %}
+				<li class="task_li">
+					<div class="task_done"></div>
+					<div class="task_container">
+						<span class="task_id">{{item.id}}</span>
+						<span class="task_time">{{item.time|date:"d M Y"}}</span>
+						<div class="task_tag circle"><span>{{item.tag}}</span></div>
+						<span class="task_author">{{item.name}}</span>
+						<span class="task_content">{{item.task}}</span>
+					</div>
+				</li>
+			{% endfor %}
+			<li class='task_place_holder'></li>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block summary %}
+<div class="summary_area">
+	<div class="summary_area_container">
+		<div class='task_summary_area'>
+			<div id='task_summary_dashboard' class='border summary_dashboard'></div>
+			<ul class='summary_table'>
+				{% for item in task_summary %}
+					<li class='border'>
+						<div class='summary_title'>{{item.name}}</div>
+						<span>{{item.value}}</span>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class='user_summary_area'>
+			<div id='user_summary_dashboard' class='border summary_dashboard'></div>
+			<ul class='summary_table'>
+				{% for item in user_summary %}
+					<li class='border'>
+						<div class='summary_title'>{{item.name}}</div>
+						<span>{{item.value}}</span>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class='summary_menu'>
+			<div class='summary_by_todo_button circle'>TODO</div>
+			<div class='summary_by_user_button circle'>USER</div>
+		</div>
+		<div class='create_task_button'>
+			<div class='create_task_icon'></div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block leftnav %}
+<div class='leftnav selected'>
+	<ul>
+		<a href="/task/tag/ALL">
+			<li class='border'>ALL</li>
+		</a>
+		{% for item in task_tag %}
+			<a href="/task/tag/{{item}}">
+				<li class='border'>{{item}}</li>
+			</a>
+		{% endfor %}
+	</ul>
+	<div style='clear:both'></div>
+</div>
+{% endblock %}
+{%  block comment %}
+<div class="comment_form" id='debug-task-comment-form'>
+	<div class='comment_details'>
+		<div class='comment_task_container'>
+			<span class='tag_in_comment'></span>
+			<span class='time_in_comment'></span>
+		</div>
+		<div class='comment_task_detail'></div>
+		<div>
+			<div class='reassign' id='debug-reassign-owner'>
+				<input id='reassign' placeholder='Reassign owner to...'>
+				<div class='submit_reassign submit_button'>GO</div>
+				<div class="user_list">
+					{% for user in users %}
+						<li>{{user.username}}</li>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='comment_in_comment'>
+		<div class='comment_list_area'>
+			<div class='comment_topic'>Comments<span class='author_id'></span></div>
+			<div class="comment_list" id='debug-task-comment-li'></div>
+		</div>
+		<div class='comment_submit_area' id='debug-task-comment-creator'>
+			<textarea class='comment_textarea' placeholder='Add a comment...'></textarea>
+			<div class="comment_submit submit_button">Submit</div>
+			<div class="comment_validation"></div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block taskcreator %}
+<div class='task_creator'>
+	<div class='task_creator_background'></div>
+	<div class='task_creator_panel' id='debug-task-creator'>
+		<div class='topic'>Create New Task</div>
+		<div class='close_task_creator'></div>
+		<textarea placeholder='Add a task...'></textarea>
+		<div class='task_tag_area'>
+			<input placeholder='Add a tag...' id='tag' autocomplete="off">
+			<div class='task_tag_container'>
+				<ul>
+					{% for item in task_tag %}
+						<li>{{item}}</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div style='clear:both'></div>
+			<div class="task_submit submit_button">Submit</div>
+		</div>
+		<div class="task_validation"></div>
+	</div>
+</div>
+{% endblock %}

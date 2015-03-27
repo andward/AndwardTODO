@@ -1,0 +1,27 @@
+{% extends "login_base.html" %}
+{% load url from future %}
+{% block login %}
+	<div class="login_form">
+		<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+			{% csrf_token %}
+			<table>
+				<tr>
+					<td>{{ form.username.label_tag }}</td>
+					<td>{{ form.username }}</td>
+				</tr>
+				<tr>
+					<td>{{ form.password.label_tag }}</td>
+					<td>{{ form.password }}</td>
+				</tr>
+			</table>
+			<div class="login_submit_area">
+				<input class ='login_submit_button input' type="submit" value="Login" />
+				<input type="hidden" name="next" value="{{ next }}" />
+				<a href="/accounts/signup"><div class="register_button">Register</div></a>
+			</div>
+		</form>
+		{% if form.errors %}
+			<div class="task_validation">Your username and password didn't match. Please try again.</div>
+		{% endif %}
+	</div>
+{% endblock %}

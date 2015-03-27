@@ -1,0 +1,11 @@
+{% extends "login_base.html" %}
+{% block title %}Create an account{% endblock %}
+{% block signup %}
+	<div class="signup_form">
+		<div class='signup_title'>Create a new user</div>
+		<form action="" method="post">
+			{{ form.as_p }}
+			<input class='signup_submit_button input' type="submit" value="GO">
+		</form>
+	</div>
+{% endblock %}
