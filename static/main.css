@@ -1,6 +1,19 @@
 @charset "UTF-8";
 	
 	/* Genral */
+
+	@media screen and (min-width : 2000px) {
+	.task_area { 
+		margin: 0 auto; 
+		width: 850px; 
+	}
+	}
+	@media screen and (max-width : 2000px) {
+    .task_area { 
+		margin: 0 auto; 
+		width: 750px; 
+	}
+	}
 	body {
 		background-color: #EBECED;
 		font-family: Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
@@ -265,9 +278,9 @@
 		bottom: 0;
 		min-height: 100%;
 		position: fixed;
-		right: -350px;
+		right: -320px;
 		top: 70px;
-		width: 350px;
+		width: 320px;
 	}
 	.summary_area_container { height: 100%; position: relative; }
 	.summary_dashboard { 
@@ -343,7 +356,7 @@
 	.task_creator_panel {
 		background: white;
 		bottom: 10%;
-		height: 350px;
+		height: 320px;
 		left: 0;
 		margin: auto;
 		opacity: 1;
@@ -396,10 +409,6 @@
 	}
 	
 	/* Task */
-	.task_area { 
-		margin: 0 auto; 
-		width: 850px; 
-	}
 	.task_li {
 		background-color: white;
 		cursor: pointer;
@@ -631,7 +640,7 @@
 	/* Login */
 	.signup_form {
 		background: white;
-		height: 400px;
+		height: 500px;
 	}
 	.signup_title {
 		padding: 10px 30px;
@@ -643,7 +652,7 @@
 	}
 	.signup_form form {
 		margin: 10px 0;
-		height: 100%;
+		height: 450px;
 		background: white;
 		position: relative;
 	}

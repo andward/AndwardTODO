@@ -1,6 +1,7 @@
 {% extends "login_base.html" %}
 {% load url from future %}
 {% block login %}
+	<div class="landing_logo">ANDWARD. TODO</div>
 	<div class="login_form">
 		<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
 			{% csrf_token %}
