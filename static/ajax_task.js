@@ -176,6 +176,14 @@ var pageInit = {
 		});
 	},
 
+	checkCNChar: function(str) {
+		if (str.substr(0, 1).match(/[\u3400-\u9FBF]/)) {
+			return true
+		} else {
+			return false
+		}
+	},
+
 	hoverActionButton: function() {
 		$(pageInit.config.todoButton)
 			.add(pageInit.config.toTopButton)
@@ -198,6 +206,9 @@ var pageInit = {
 				pick_index += 1;
 				categoryList[html] = pageInit.config.colorList[pick_index];
 				$(this).css("background-color", categoryList[html]);
+			}
+			if (pageInit.checkCNChar(html)) {
+				$(this).find("span").css("padding-left", "8px");
 			}
 		});
 	},

@@ -2,13 +2,13 @@
 	
 	/* Genral */
 
-	@media screen and (min-width : 2000px) {
+	@media screen and (min-width : 1800px) {
 	.task_area { 
 		margin: 0 auto; 
 		width: 850px; 
 	}
 	}
-	@media screen and (max-width : 2000px) {
+	@media screen and (max-width : 1800px) {
     .task_area { 
 		margin: 0 auto; 
 		width: 750px; 
@@ -443,8 +443,15 @@
 		padding-left: 10px;
 	}
 	.task_tag_container li:hover { background: #f5f5f5; }
-	.task_tag { margin: 0 25px; overflow: hidden; }
-	.task_tag span { color: #e5e5e5; letter-spacing: 20px; padding-left: 11px; }
+	.task_tag { 
+		margin: 0 25px; 
+		overflow: hidden; 
+	}
+	.task_tag span { 
+		color: #e5e5e5; 
+		letter-spacing: 20px; 
+		padding-left: 11px; 
+	}
 	.task_id { display: none; }
 	.task_time { display: none; }
 	.author_id { display: none; }
