@@ -4,18 +4,23 @@ TODO web tool which named Andward
 ##Installation (Linux)
 
 -Clone project from github.
+
 <code>git clone https://github.com/andward/AndwardTODO.git</code>
 
 -Install reqirment packages (make sure you already has pip).
+
 <code>pip install -r requirements.txt</code>
 
 ##Setup your database
 
 -Make sure you has MySQL in your linux.
+
 -Create a database (exp: todo)
-<code>create database todo character set utf8</code>
+
+<code>Create database todo character set utf8</code>
+
 -Config your database information in settings.py
-{% highlight ruby %}
+<code>
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # mysql, 'sqlite3' or 'oracle'.
@@ -26,8 +31,10 @@ DATABASES = {
         'PORT': '3306',                 
     }
 }
-{% endhighlight %}
-- Go to project folder and sync database
+<code>
+
+##Go to project folder and sync database
+
 <code>cd AndwardTODO</code>
 <code>python manage.py syncdb</code>
 
