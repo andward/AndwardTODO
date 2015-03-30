@@ -76,10 +76,10 @@ var pageInit = {
 			}
 			if (!$(event.target).closest(pageInit.config.summaryPanel).length) {
 				$(pageInit.config.summaryPanel).stop()
-				.removeClass('activated')
-				.animate({
-					'right': '-320px'
-				}, 'fast');
+					.removeClass('activated')
+					.animate({
+						'right': '-320px'
+					}, 'fast');
 				$(pageInit.config.pageBody).animate({
 					'padding-right': 0
 				}, 'fast');
@@ -206,7 +206,7 @@ var pageInit = {
 	tagRender: function() {
 		var tag_path = (window.location.href).split("/").pop();
 		$(pageInit.config.leftNav).find("li").each(function() {
-			if ($(this).html() === tag_path) {
+			if ($(this).html() === decodeURIComponent(tag_path)) {
 				$(this).css({
 					"background": "#f5f5f5",
 				});
@@ -333,37 +333,35 @@ var pageAction = {
 					type: "POST",
 					url: window.location.href,
 					data: {
-						'new_task': 1,
+						'new_task': true,
 						'task': task,
 						'task_tag': unescape(tag),
 					},
 					cache: false,
 					dataType: "json",
-					success: function(data) {
-						if (data) {
-							list = eval(data);
-							$(pageAction.config.todoTaskList)
-								.prepend("<li class='task_li'>\
+				}).done(function(data) {
+					if (data) {
+						$(pageAction.config.todoTaskList)
+							.prepend("<li class='task_li'>\
 							<div class='task_todo'></div>\
 							<div class='task_to_top'></div>\
 							<div class='task_container'>\
-								<span class='task_id'>" + list[0] + "</span>\
-								<span class='task_time'>" + list[1] + "</span>\
+								<span class='task_id'>" + data.id + "</span>\
+								<span class='task_time'>" + data.time + "</span>\
 								<div class='task_tag circle'><span>" + tag + "</span></div>\
-								<span class='task_author'>" + list[2] + "</span>\
+								<span class='task_author'>" + data.username + "</span>\
 								<span class='task_content'>" + task + "</span>\
 							</div></li>");
-							$(pageAction.config.taskCreator).find("textarea").val("");
-							$(pageAction.config.taskCreator).find("input").val("");
-							if (list[3] == 1) {
-								$(pageAction.config.tagInCreator)
-									.find("ul")
-									.append("<li>" + tag + "</li>");
-							}
-							pageInit.randomCategory();
-							$(pageInit.config.taskCreatorPanel).hide();
+						$(pageAction.config.taskCreator).find("textarea").val("");
+						$(pageAction.config.taskCreator).find("input").val("");
+						if (data.new_tag == 1) {
+							$(pageAction.config.tagInCreator)
+								.find("ul")
+								.append("<li>" + tag + "</li>");
 						}
-					},
+						pageInit.randomCategory();
+						$(pageInit.config.taskCreatorPanel).hide();
+					}
 				});
 			} else {
 				$(pageAction.config.taskCreator).find("textarea").val("");
@@ -385,23 +383,22 @@ var pageAction = {
 					type: "POST",
 					url: window.location.href,
 					data: {
-						'new_comment': 1,
+						'new_comment': true,
 						"task_id": task_id,
 						"task_comment": comment,
 					},
 					cache: false,
 					dataType: "json",
-					success: function(data) {
-						/*jshint multistr: true */
-						$(pageAction.config.commentList)
-							.prepend("<div class='comment_li'>\
+				}).done(function(data) {
+					/*jshint multistr: true */
+					$(pageAction.config.commentList)
+						.prepend("<div class='comment_li'>\
 						<div class='comment_author_circle'><span>" + data.toUpperCase() + "</span></div>\
 					    <div class='comment_content_area'><div class='comment_author'>\
 					    <span>" + data + "</span><span class='comment_time'>now</span></div>\
 						<div class='comment_content'>" + comment + "</div></div>\
 						</div>");
-						$(pageAction.config.commentTextArea).val("");
-					}
+					$(pageAction.config.commentTextArea).val("");
 				});
 			} else {
 				$(pageAction.config.commentValidation).html("Please input comment");
@@ -442,29 +439,27 @@ var pageAction = {
 					type: "POST",
 					url: window.location.href,
 					data: {
-						'lookfor_task': 1,
+						'look_for_task': 1,
 						'task_id': id,
 					},
 					cache: false,
 					dataType: "json",
-					success: function(data) {
-						list = eval(data);
-						$(list).each(function(i) {
-							/*jshint multistr: true */
-							if (author === data[i][1]) {
-								var owner_circle = "<div class='comment_author_circle blue_circle'><span >" + data[i][1].toUpperCase() + "</span></div>";
-							} else {
-								var owner_circle = "<div class='comment_author_circle'><span>" + data[i][1].toUpperCase() + "</span></div>";
-							}
-							$(pageAction.config.commentList)
-								.prepend(
-									"<div class='comment_li'>" + owner_circle + "<div class='comment_content_area'>\
-									<div class='comment_author'>\
-									<span>" + data[i][1] + "</span>\
-									<span class='comment_time'>" + data[i][2] + "</span></div>\
-						            <div class='comment_content'>" + data[i][0] + "</div></div></div>");
-						});
-					},
+				}).done(function(data) {
+					$(data).each(function(i) {
+						/*jshint multistr: true */
+						if (author === data[i].username) {
+							var comment_user = "<div class='comment_author_circle blue_circle'><span >" + author.toUpperCase() + "</span></div>";
+						} else {
+							var comment_user = "<div class='comment_author_circle'><span>" + author.toUpperCase() + "</span></div>";
+						}
+						$(pageAction.config.commentList)
+							.prepend(
+								"<div class='comment_li'>" + comment_user + "<div class='comment_content_area'>\
+								<div class='comment_author'>\
+								<span>" + data[i].username + "</span>\
+								<span class='comment_time'>" + data[i].time + "</span></div>\
+					            <div class='comment_content'>" + data[i].comment + "</div></div></div>");
+					});
 				});
 			}
 		});
@@ -488,9 +483,8 @@ var pageAction = {
 				},
 				cache: false,
 				dataType: "json",
-				success: function(data) {
-					console.log("Mark DONE successful");
-				}
+			}).done(function(data) {
+				console.log(data);
 			});
 		});
 	},
@@ -512,9 +506,8 @@ var pageAction = {
 				},
 				cache: false,
 				dataType: "json",
-				success: function(data) {
-					console.log("Mark TODO successful");
-				}
+			}).done(function(data) {
+				console.log(data);
 			});
 		});
 	},
@@ -535,9 +528,8 @@ var pageAction = {
 				},
 				cache: false,
 				dataType: "json",
-				success: function(data) {
-					console.log("Mark TOP successful");
-				}
+			}).done(function(data) {
+				console.log(data);
 			});
 		});
 	},
@@ -554,18 +546,17 @@ var pageAction = {
 					type: "POST",
 					url: window.location.href,
 					data: {
-						"change_owner": 1,
+						"change_owner": true,
 						"new_owner": owner,
 						"task_id": id
 					},
 					cache: false,
 					dataType: "json",
-					success: function(data) {
-						$(pageAction.config.reassignInput).val("");
-						$(pageAction.config.commentArea)
-							.siblings(pageAction.config.taskContainer)
-							.find(pageAction.config.taskAuthor).html(owner);
-					}
+				}).done(function(data) {
+					$(pageAction.config.reassignInput).val("");
+					$(pageAction.config.commentArea)
+						.siblings(pageAction.config.taskContainer)
+						.find(pageAction.config.taskAuthor).html(data.new_owner);
 				});
 			} else {
 				$(pageAction.config.reassignInput).val("");
@@ -583,31 +574,29 @@ var pageAction = {
 				},
 				cache: false,
 				dataType: "json",
-				success: function(data) {
-					if (data !== '') {
-						$(pageAction.config.commentArea)
-							.insertAfter(pageAction.config.summaryArea).hide();
-						$(pageAction.config.doneTaskList).children().remove();
-						obj = eval(data);
-						$(obj).each(function(i) {
-							$(pageAction.config.doneTaskList)
-								.append("<li class='task_li'>\
+			}).done(function(data) {
+				if (data !== '') {
+					$(pageAction.config.commentArea)
+						.insertAfter(pageAction.config.summaryArea).hide();
+					$(pageAction.config.doneTaskList).children().remove();
+					$(data).each(function(i) {
+						$(pageAction.config.doneTaskList)
+							.append("<li class='task_li'>\
 							<div class='task_done'></div>\
 							<div class='task_container'>\
-							<span class='task_id'>" + data[i][0] + "</span>\
-							<div class='task_tag'><span>" + data[i][1] + "</span></div>\
-							<span class='task_author'>" + data[i][3] + "</span>\
-							<span class='task_content'>" + data[i][2] + "</span>\
+							<span class='task_id'>" + data[i].id + "</span>\
+							<span class='task_time'>" + data[i].time + "</span>\
+							<div class='task_tag circle'><span>" + data[i].tag + "</span></div>\
+							<span class='task_author'>" + data[i].username + "</span>\
+							<span class='task_content'>" + data[i].task + "</span>\
 							</div>\
 							</li>");
-						});
-						pageInit.randomCategory();
-					}
+					});
+					pageInit.randomCategory();
 				}
 			});
 		});
 	},
-
 	drawTaskSummary: function() {
 		data_dict = [
 			["Status", "Number"]
@@ -648,9 +637,9 @@ var pageAction = {
 };
 
 $(document).ready(pageInit.init);
-// google.load("visualization", "1", {
-// 	packages: ["corechart"]
-// });
-// google.setOnLoadCallback(pageAction.drawTaskSummary);
-// google.setOnLoadCallback(pageAction.drawUserSummary);
+google.load("visualization", "1", {
+	packages: ["corechart"]
+});
+google.setOnLoadCallback(pageAction.drawTaskSummary);
+google.setOnLoadCallback(pageAction.drawUserSummary);
 pageAction.init();

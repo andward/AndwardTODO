@@ -1,11 +1,11 @@
-#! /usr/bin/python2.6
+#! /usr/bin/python2.7
+# -*- coding: utf-8 -*-
 from django import *
 from django.conf.urls.defaults import *
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from todo.models import *
 from form import *
-import simplejson
 from action import *
 from errormsg import *
 from django.views.decorators.csrf import csrf_exempt
@@ -71,10 +71,8 @@ def getTask(request, url_type, type_name=None):
                               )
 
 
-
 def getFullTagList():
     return [tag["tag"] for tag in Task.objects.values("tag").distinct()]
-
 
 
 def postPattern():
@@ -82,7 +80,7 @@ def postPattern():
     return {
         "new_task": addNewTask,
         "new_comment": addNewComment,
-        "lookfor_task": getTaskComment,
+        "look_for_task": getTaskComment,
         "task_done": markTaskDone,
         "task_todo": markTaskTodo,
         "task_top": markTaskTop,
@@ -110,20 +108,24 @@ def addNewTask(request, url_type=None, type_name=None):
                  name=username,
                  tag=tag,
                  status=0,
-                 time=timeStamp())
+                 time=timeStamp()
+                 )
         p.save()
-        taskEmailNotification(request=request, todo=new_task)
+        # taskEmailNotification(request=request, todo=new_task)
         if tag in getFullTagList():
-            return HttpResponse(simplejson.dumps([
-                p.id, p.time.strftime('%d %b %Y'), username, 0]),
-                mimetype='application/javascript')
+            new_tag = 0
         else:
-            return HttpResponse(simplejson.dumps([
-                p.id, p.time.strftime('%d %b %Y'), username, 1]),
-                mimetype='application/javascript')
+            new_tag = 1
+        return HttpResponse(JSONFormat({
+            "id": p.id,
+            "time": p.time.strftime('%d %b %Y'),
+            "username": username,
+            "new_tag": new_tag
+        }))
     else:
-        return HttpResponse(simplejson.dumps(''),
-                            mimetype='application/javascript')
+        return HttpResponse(JSONFormat(""),
+                            content_type='application/json'
+                            )
 
 
 def reassignOwner(request, url_type=None, type_name=None):
@@ -134,13 +136,15 @@ def reassignOwner(request, url_type=None, type_name=None):
     if dataValidator(new_owner):
         task.name = new_owner
         task.save()
-        taskEmailNotification(
-            request=request, todo=task.task, new_owner=new_owner)
-        return HttpResponse(simplejson.dumps(""),
-                            mimetype='application/javascript')
+        # taskEmailNotification(
+        #    request=request, todo=task.task, new_owner=new_owner)
+        return HttpResponse(JSONFormat({
+            "new_owner": new_owner
+        }))
     else:
-        return HttpResponse(simplejson.dumps(""),
-                            mimetype='application/javascript')
+        return HttpResponse(JSONFormat(""),
+                            content_type='application/json'
+                            )
 
 
 def markTaskDone(request, url_type=None, type_name=None):
@@ -149,10 +153,11 @@ def markTaskDone(request, url_type=None, type_name=None):
         id=request.POST.get("task_id", ""))
     task.status = 1
     task.save()
-    taskEmailNotification(
-        request=request, todo=task.task, status='DONE')
-    return HttpResponse(simplejson.dumps(""),
-                        mimetype='application/javascript')
+    # taskEmailNotification(
+    #    request=request, todo=task.task, status='DONE')
+    return HttpResponse(JSONFormat("Mark DONE succeed"),
+                        content_type='application/json'
+                        )
 
 
 def markTaskTodo(request, url_type=None, type_name=None):
@@ -161,10 +166,11 @@ def markTaskTodo(request, url_type=None, type_name=None):
         id=request.POST.get("task_id", ""))
     task.status = 0
     task.save()
-    taskEmailNotification(
-        request=request, todo=task.task, status='TODO')
-    return HttpResponse(simplejson.dumps(""),
-                        mimetype='application/javascript')
+    # taskEmailNotification(
+    #    request=request, todo=task.task, status='TODO')
+    return HttpResponse(JSONFormat("Mark TODO succeed"),
+                        content_type='application/json'
+                        )
 
 
 def markTaskTop(request, url_type=None, type_name=None):
@@ -173,10 +179,11 @@ def markTaskTop(request, url_type=None, type_name=None):
         id=request.POST.get("task_id", ""))
     task.status = 2
     task.save()
-    taskEmailNotification(
-        request=request, todo=task.task, status='High Priority')
-    return HttpResponse(simplejson.dumps(""),
-                        mimetype='application/javascript')
+    # taskEmailNotification(
+    #    request=request, todo=task.task, status='High Priority')
+    return HttpResponse(JSONFormat("Mark TOP succeed"),
+                        content_type='application/json'
+                        )
 
 
 def addNewComment(request, url_type=None, type_name=None):
@@ -187,17 +194,18 @@ def addNewComment(request, url_type=None, type_name=None):
     task = Task.objects.get(id=int(task_id))
     if dataValidator(new_comment):
         p = Comment(mark=task_id,
-                            comment=new_comment,
-                            name=username,
-                            time=timeStamp())
+                    comment=new_comment,
+                    name=username,
+                    time=timeStamp()
+                    )
         p.save()
-        taskEmailNotification(
-            request=request, todo=task.task, comment=new_comment)
-        return HttpResponse(simplejson.dumps(username),
-                            mimetype='application/javascript')
+        # taskEmailNotification(
+        #    request=request, todo=task.task, comment=new_comment)
+        return HttpResponse(JSONFormat(username))
     else:
-        return HttpResponse(simplejson.dumps(''),
-                            mimetype='application/javascript')
+        return HttpResponse(JSONFormat(""),
+                            content_type='application/json'
+                            )
 
 
 def getTaskComment(request, url_type=None, type_name=None):
@@ -205,44 +213,47 @@ def getTaskComment(request, url_type=None, type_name=None):
     comments = Comment.objects.filter(
         mark=request.POST.get("task_id", ""))
     if comments:
-        return HttpResponse(simplejson.dumps(
-            [[item.comment, item.name, item.time.strftime('%d %b %Y')] for item in comments]),
-            mimetype='application/javascript')
+        return HttpResponse(JSONFormat([{
+            "comment": item.comment,
+            "username": item.name,
+            "time": item.time.strftime('%d %b %Y')
+        } for item in comments]))
     else:
-        return HttpResponse(simplejson.dumps(''),
-                            mimetype='application/javascript')
+        return HttpResponse(JSONFormat(""),
+                            content_type='application/json'
+                            )
 
 
-def scanNewTask(request, url_type, type_name):
-    # Ajax function: real time scan new TODO
-    if url_type == 'tag' and type_name == 'ALL':
-        max_id = request.POST.get("scan_id", "")
-        if ((Task.objects.all().order_by("-id"))[0]).id > int(max_id):
-            return HttpResponse(simplejson.dumps('1'),
-                                mimetype='application/javascript')
-        else:
-            return HttpResponse(simplejson.dumps('0'),
-                                mimetype='application/javascript')
-    else:
-        return HttpResponse(simplejson.dumps('0'),
-                            mimetype='application/javascript')
+# def scanNewTask(request, url_type, type_name):
+# Ajax function: real time scan new TODO
+#     if url_type == 'tag' and type_name == 'ALL':
+#         max_id = request.POST.get("scan_id", "")
+#         if ((Task.objects.all().order_by("-id"))[0]).id > int(max_id):
+#             return HttpResponse(simplejson.dumps('1'),
+#                                 mimetype='application/javascript')
+#         else:
+#             return HttpResponse(simplejson.dumps('0'),
+#                                 mimetype='application/javascript')
+#     else:
+#         return HttpResponse(simplejson.dumps('0'),
+#                             mimetype='application/javascript')
 
 
-def returnNewTask(request, url_type, type_name):
-    # Ajax function: real time return new TODO
-    if url_type == 'tag' and type_name == 'ALL':
-        max_id = request.POST.get("return_id", "")
-        tasks = Task.objects.filter(id__gt=int(max_id))
-        if tasks:
-            return HttpResponse(simplejson.dumps(
-                [[item.id, item.tag, item.task, item.name] for item in tasks]),
-                mimetype='application/javascript')
-        else:
-            return HttpResponse(simplejson.dumps(''),
-                                mimetype='application/javascript')
-    else:
-        return HttpResponse(simplejson.dumps(''),
-                            mimetype='application/javascript')
+# def returnNewTask(request, url_type, type_name):
+# Ajax function: real time return new TODO
+#     if url_type == 'tag' and type_name == 'ALL':
+#         max_id = request.POST.get("return_id", "")
+#         tasks = Task.objects.filter(id__gt=int(max_id))
+#         if tasks:
+#             return HttpResponse(simplejson.dumps(
+#                 [[item.id, item.tag, item.task, item.name] for item in tasks]),
+#                 mimetype='application/javascript')
+#         else:
+#             return HttpResponse(simplejson.dumps(''),
+#                                 mimetype='application/javascript')
+#     else:
+#         return HttpResponse(simplejson.dumps(''),
+#                             mimetype='application/javascript')
 
 
 def returnAllDoneTask(request, url_type, type_name):
@@ -252,6 +263,12 @@ def returnAllDoneTask(request, url_type, type_name):
     elif url_type == "tag" and type_name:
         task_done = Task.objects.filter(
             status=1).filter(tag=type_name).order_by("-id")
-    return HttpResponse(simplejson.dumps(
-        [[item.id, item.tag, item.task, item.name] for item in task_done]),
-        mimetype='application/javascript')
+    return HttpResponse(JSONFormat([{
+        "id": item.id,
+        "tag": item.tag,
+        "task": item.task,
+        "username": item.name,
+        "time": item.time.strftime('%d %b %Y')
+    } for item in task_done]),
+        content_type='application/json'
+    )

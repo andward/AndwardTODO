@@ -1,4 +1,5 @@
-#! /usr/bin/python2.6
+#! /usr/bin/python2.7
+# -*- coding: utf-8 -*-
 from django import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, Http404
@@ -28,6 +29,11 @@ def httpMethod(request, *args, **kwargs):
     elif request.method == 'POST' and post is not None:
         return post(request, *args, **kwargs)
     raise Http404
+
+
+def JSONFormat(data):
+    return simplejson.dumps(data, ensure_ascii=False)
+
 
 
 def modelValidator(func):
