@@ -44,12 +44,17 @@
 		border: 1px solid #ddd;
 		font-family: inherit;
 		outline: none;
-		padding-left: 10px;
+		padding: 5px 10px;
 		resize: vertical;
 		width: 100%;
+		font-size: 13px;
 	}
 	textarea:focus { border: 1px solid #3079ed; }
-	input { border: 1px solid #ddd; }
+	input { 
+		font-family: inherit;
+		border: 1px solid #ddd;
+		font-size: 13px;
+	}
 	input:focus { border: 1px solid #3079ed; }
 	.submit_button {
 		background-color: #3079ed;
@@ -166,7 +171,7 @@
 	}
 	.comment_details { 
 		background: white; 
-		padding: 30px 75px 45px ; 
+		padding: 35px 75px 50px ; 
 	}
 	.comment_task_container {
 		display: flex;
