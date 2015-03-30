@@ -1,5 +1,5 @@
 # Andward.TODO
-TODO web tool which named Andward
+TODO management and reassignment platform which named Andward.
 
 ##Installation (Linux)
 
@@ -20,15 +20,16 @@ TODO web tool which named Andward
 <code>Create database todo character set utf8</code>
 
 -Config your database information in settings.py
+
 <code>
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # mysql, 'sqlite3' or 'oracle'.
-        'NAME': 'todo',                      # Your database name
-        'USER': 'root',                      # root
-        'PASSWORD': 'your password',    # your root password
-        'HOST': 'localhost',     # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '3306',                 
+        'ENGINE': 'django.db.backends.mysql', # mysql<br />
+        'NAME': 'todo',                      # Your database name<br />
+        'USER': 'root',                      # root<br />
+        'PASSWORD': 'your password',    # your root password<br />
+        'HOST': 'localhost',     # Set to empty string for localhost. Not used with sqlite3.<br />
+        'PORT': '3306',<br />                
     }
 }
 <code>
