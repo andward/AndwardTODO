@@ -109,23 +109,23 @@ def taskEmailNotification(request, todo, comment=None, new_owner=None, status=No
     user_email = User.objects.get(username=receiver).email
     if comment:
         email_text = "{0} has submitted a comment:\n\n{1}".format(receiver, comment)
-        cc_email_addr = 'qa-jenkins@google.com'
+        cc_email_addr = 'someone@domain.com'
     elif new_owner:
         email_text = "TODO: {0}\n\nhas been reassigned to {1}".format(todo, new_owner)
         try:
             cc_email_addr = User.objects.get(username=new_owner).email
         except:
-            cc_email_addr = new_owner + '@google.com'
+            cc_email_addr = new_owner + '@domain.com'
     elif status:
         email_text = "{0} has marked it as {1}".format(receiver, status)
-        cc_email_addr = 'qa-jenkins@google.com'
+        cc_email_addr = 'someone@domain.com'
     else:
         email_text = "{0} has submitted a TODO:\n\n{1}".format(receiver, todo)
-        cc_email_addr = 'qa-jenkins@google.com'
-    signature = "\n\nTo check TODO, visit http://sha-qa1.sha/feedback/tag/ALL"
+        cc_email_addr = 'someone@domain.com'
+    signature = "\n\nTo check TODO, visit Andward.TODO site"
     msg = MIMEText(email_text + signature)
     msg['Subject'] = 'TODO: {}'.format(todo)
-    from_email_addr = 'qa-jenkins@google.com'
+    from_email_addr = 'someone@domain.com'
     to_email_addr = user_email
     msg['From'] = from_email_addr
     msg['To'] = to_email_addr
