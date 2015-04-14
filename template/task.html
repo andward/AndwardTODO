@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block todo %}
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script language="javascript" type="text/javascript" src="/static/ajax_task.js"></script>
+<script language="javascript" type="text/javascript" src="/static/js/ajax_task.js"></script>
 <div class="task_area">
 	<div class="task_form" id='debug-task-form'>
-		<div class='topic'><b>TODO</b></div>
+		<div class="topic"><b>TODO</b></div>
+		<div class="task_notification">
+			<div class="task_notification_ring"></div>
+			<div><span></span> new TODO reported by other person..</div>
+		</div>
 		<div class="task_list_top" id='debug-top-task'>
 			{% for item in task_top %}
 				<li class='task_li'>

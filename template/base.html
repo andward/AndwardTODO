@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width">
         <link rel="shortcut icon" href="/static/media/google.ico" type="image/x-icon">
         <script src="//code.jquery.com/jquery-1.7.1.min.js"></script>        
-        <link href="/static/main.css" rel="stylesheet" type="text/css" />
+        <link href="/static/css/main.css" rel="stylesheet" type="text/css" />
         {{ form.media }}
         <script>
         function getCookie(name) {
@@ -52,6 +52,8 @@
         }
         });
         </script>
+        {% load socketio_tags %}
+        {% socketio %}
     </head>
     <body class="body">
         <div class='header'>
@@ -76,7 +78,7 @@
                 {% block 404_page %}{% endblock %}
             </div>
             <div class='footer' id='debug-footer'>
-                <script language="javascript" type="text/javascript" src="/static/main.js"></script>
+                <script language="javascript" type="text/javascript" src="/static/js/main.js"></script>
             </div>
         </body>
     </html>

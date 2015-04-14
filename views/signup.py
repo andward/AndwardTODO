@@ -32,7 +32,7 @@ def postRegister(request):
     form = UserCreateForm(request.POST)
     if form.is_valid():
         new_user = form.save()
-        return HttpResponseRedirect("/feedback/tag/ALL")
+        return HttpResponseRedirect("/task/tag/ALL")
     else:
         return HttpResponseRedirect("/accounts/signup/")
 

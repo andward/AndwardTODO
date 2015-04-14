@@ -4,6 +4,7 @@ from django import *
 from django.conf.urls.defaults import *
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.template import RequestContext
 from todo.models import *
 from form import *
 from action import *
@@ -11,6 +12,8 @@ from errormsg import *
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from notification import *
+
 
 
 @login_required(login_url='/accounts/login/')
@@ -67,7 +70,8 @@ def getTask(request, url_type, type_name=None):
                                'user_summary': user_summary,
                                'task_tag': getFullTagList(),
                                'users': task_users,
-                               'current_user': username}
+                               'current_user': username},
+                               context_instance=RequestContext(request)
                               )
 
 
@@ -85,7 +89,8 @@ def postPattern():
         "task_todo": markTaskTodo,
         "task_top": markTaskTop,
         "change_owner": reassignOwner,
-        "expand_all_task": returnAllDoneTask
+        "expand_all_task": returnAllDoneTask,
+        "new_notify_ids": broadcastNewTask
     }
 
 
@@ -118,10 +123,32 @@ def addNewTask(request, url_type=None, type_name=None):
             new_tag = 1
         return HttpResponse(JSONFormat({
             "id": p.id,
+            "task": new_task,
+            "tag": tag,
             "time": p.time.strftime('%d %b %Y'),
-            "username": username,
+            "name": username,
             "new_tag": new_tag
         }))
+    else:
+        return HttpResponse(JSONFormat(""),
+                            content_type='application/json'
+                            )
+
+
+def broadcastNewTask(request, url_type=None, type_name=None):
+    # Ajax function: return broadcast tasks
+    broadcast_ids = request.POST.getlist("new_notify_ids", "")
+    print broadcast_ids
+    tasks = Task.objects.filter(id__in=broadcast_ids)
+    if tasks:
+        return HttpResponse(JSONFormat([{
+            "id": item.id,
+            "task": item.task,
+            "tag": item.tag,
+            "time": item.time.strftime('%d %b %Y'),
+            "name": item.name,
+            "new_tag": 0
+        } for item in tasks]))
     else:
         return HttpResponse(JSONFormat(""),
                             content_type='application/json'

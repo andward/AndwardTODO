@@ -17,7 +17,7 @@ TEMPLATE_DEBUG = DEBUG
 SITE_URL = os.path.abspath(os.path.dirname(__file__)) 
 
 #media root directory
-MEDIA_ROOT = SITE_URL + '/media/'
+MEDIA_ROOT = SITE_URL + '/static/media/'
 
 # template root directory
 TEMPLATE_DIRS = (SITE_URL + '/template',)
@@ -36,7 +36,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'todo',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'your password',                  # Not used with sqlite3.
+        'PASSWORD': '86112233',                  # Not used with sqlite3.
         'HOST': 'localhost',     # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -69,7 +69,7 @@ USE_L10N = True
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = "/static/media/"
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -106,6 +106,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'todo',
+    'django_socketio',
 
 
 
@@ -122,7 +123,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages'
+    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
     )
 
 
@@ -130,6 +132,6 @@ STATIC_URL="/static/"
 
 LOGIN_REDIRECT_URL = "/task/tag/ALL"
 
-FILE_UPLOAD_PERMISSIONS = 0644
+SOCKETIO_HOST = 'localhost'
 
-TRACKING_USE_GEOIP =True
+SOCKETIO_PORT = 9000
