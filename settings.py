@@ -14,7 +14,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 #site root directory
-SITE_URL = os.path.abspath(os.path.dirname(__file__)) 
+SITE_URL = os.path.abspath(os.path.dirname(__file__))
 
 #media root directory
 MEDIA_ROOT = SITE_URL + '/static/media/'
@@ -33,10 +33,10 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'todo',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '86112233',                  # Not used with sqlite3.
+        'PASSWORD': 'your password',                  # Not used with sqlite3.
         'HOST': 'localhost',     # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -107,6 +107,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'todo',
     'django_socketio',
+    'django_crontab',
 
 
 
@@ -128,10 +129,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     )
 
 
-STATIC_URL="/static/"
+STATIC_URL = "/static/"
 
 LOGIN_REDIRECT_URL = "/task/tag/ALL"
 
 SOCKETIO_HOST = 'localhost'
 
 SOCKETIO_PORT = 9000
+
+CRONJOBS = [
+    ('0 0 * * *', 'AndwardTODO.cron.checkTaskExpiration')
+]

@@ -29,6 +29,7 @@ var pageInit = {
 			reassignBox: "#reassign",
 			userList: ".user_list",
 			closeCreatorButton: ".close_task_creator",
+			datepicker: "#datepicker",
 			colorList: [
 				'#1abc9c',
 				'#16a085',
@@ -58,6 +59,7 @@ var pageInit = {
 		pageInit.expandTagListInCreator();
 		pageInit.expandUserList();
 		pageInit.hideExpandItems();
+		pageInit.loadDatePicker();
 	},
 
 	hideExpandItems: function() {
@@ -184,6 +186,12 @@ var pageInit = {
 		}
 	},
 
+	loadDatePicker: function() {
+		$(pageInit.config.datepicker).datepicker({
+			minDate: 0
+		});
+	},
+
 	hoverActionButton: function() {
 		$(pageInit.config.todoButton)
 			.add(pageInit.config.toTopButton)
@@ -243,6 +251,7 @@ var pageAction = {
 			tagInTask: ".task_tag",
 			tagInComment: ".tag_in_comment",
 			timeInComment: ".time_in_comment",
+			expiryInComment: ".expiry_in_comment",
 			tagInCreator: ".task_tag_container",
 			tagInbox: "#tag",
 			taskCreator: ".task_creator",
@@ -252,6 +261,7 @@ var pageAction = {
 			taskValidation: ".task_validation",
 			taskID: ".task_id",
 			taskTime: ".task_time",
+			expiryTime: ".task_expiry",
 			taskContainer: ".task_container",
 			taskContent: ".task_content",
 			taskAuthor: ".task_author",
@@ -282,7 +292,8 @@ var pageAction = {
 			socket: false,
 			notificationId: 0,
 			notificationPool: [],
-			notificationBar: ".task_notification"
+			notificationBar: ".task_notification",
+			datepicker: "#datepicker"
 		};
 
 		$.extend(pageAction, settings);
@@ -344,6 +355,7 @@ var pageAction = {
 		$(pageAction.config.taskSubmitButton).live("click", function() {
 			var task = $(pageAction.config.taskCreator).find("textarea").val();
 			var tag = $(pageAction.config.taskCreator).find("input").val();
+			var expiry_date = $(pageAction.config.datepicker).val();
 			if (task.trim() !== '' && tag.trim() !== '') {
 				$(pageAction.config.taskValidation).html("");
 				$.ajax({
@@ -353,6 +365,7 @@ var pageAction = {
 						'new_task': true,
 						'task': task,
 						'task_tag': unescape(tag),
+						'expiry_date': expiry_date
 					},
 					cache: false,
 					dataType: "json",
@@ -379,6 +392,7 @@ var pageAction = {
 							<div class='task_container'>\
 								<span class='task_id'>" + data.id + "</span>\
 								<span class='task_time'>" + data.time + "</span>\
+								<span class='task_expiry'>" + data.expiry + "</span>\
 								<div class='task_tag circle'><span>" + data.tag + "</span></div>\
 								<span class='task_author'>" + data.name + "</span>\
 								<span class='task_content'>" + data.task + "</span>\
@@ -488,6 +502,7 @@ var pageAction = {
 				var author = task_container.find(pageAction.config.taskAuthor).html();
 				var tag = task_container.find(pageAction.config.tagInTask).html();
 				var time = task_container.find(pageAction.config.taskTime).html();
+				var expiry = task_container.find(pageAction.config.expiryTime).html();
 				var task = $(this).html();
 				$(pageAction.config.commentArea).hide()
 					.insertAfter(task_container)
@@ -499,6 +514,7 @@ var pageAction = {
 				$(pageAction.config.taskInComment).html(task);
 				$(pageAction.config.tagInComment).html(tag);
 				$(pageAction.config.timeInComment).html(time);
+				$(pageAction.config.expiryInComment).html(expiry);
 				$(pageAction.config.commentList)
 					.add(pageAction.config.commentValidation)
 					.add(pageAction.config.taskValidation)

@@ -54,8 +54,12 @@
 		font-family: inherit;
 		border: 1px solid #ddd;
 		font-size: 13px;
+		outline: none;
+		padding-left: 10px;
 	}
-	input:focus { border: 1px solid #3079ed; }
+	input:focus { 
+		border: 1px solid #3079ed; 
+	}
 	.submit_button {
 		background-color: #3079ed;
 		color: white;
@@ -63,8 +67,8 @@
 		cursor: pointer;
 		font-size: 11px;
 		font-weight: bold;
-		height: 28px;
-		line-height: 28px;
+		height: 30px;
+		line-height: 30px;
 		text-align: center;
 		width: 60px;
 	}
@@ -224,7 +228,11 @@
 
 
 	}
-	.reassign { height: 28px; position: relative; width: 40%; }
+	.reassign { 
+		height: 30px; 
+		position: relative; 
+		width: 40%; 
+	}
 	.submit_reassign { float: left; }
 	.user_list {
 		background: white;
@@ -257,8 +265,6 @@
 	#reassign {
 		float: left;
 		height: 100%;
-		outline: none;
-		padding-left: 10px;
 		width: 75%;
 	}
 	.tag_in_comment {
@@ -273,6 +279,12 @@
 		color: #999;
 		font-size: 13px;
 		flex: 1;
+		padding: 0 10px;
+		border-right: 1px solid #D5D5D5;
+	}
+	.expiry_in_comment {
+		padding: 0 10px;
+		color: #999;
 	}
 	.tag_in_comment:hover { background-color: #e5e5e5; }
 	
@@ -337,8 +349,13 @@
 		margin-top: 10px;
 		position: relative;
 		width: 100%;
+		display: flex;
 	}
-	.task_tag_area ul { margin: 0px; overflow: auto; padding: 0px; }
+	.task_tag_area ul { 
+		margin: 0px; 
+		overflow: auto; 
+		padding: 0px; 
+	}
 	.task_creator {
 		bottom: 0;
 		display: none;
@@ -360,7 +377,7 @@
 	.task_creator_panel {
 		background: white;
 		bottom: 10%;
-		height: 320px;
+		height: 310px;
 		left: 0;
 		margin: auto;
 		opacity: 1;
@@ -404,12 +421,8 @@
 		width: 20px;
 	}
 	#tag {
-		float: left;
 		height: 30px;
-		outline: none;
-		padding: 0px;
-		padding-left: 10px;
-		width: 35%;
+		margin-right: 10px;
 	}
 	
 	/* Task */
@@ -420,6 +433,7 @@
 		margin-bottom: 1px;
 		min-height: 50px;
 		position: relative;
+		overflow: hidden;
 	}
 	.task_container {
 		display: flex;
@@ -436,9 +450,10 @@
 		max-height: 250px;
 		overflow-y: scroll;
 		position: absolute;
-		top: 32px;
+		top: 30px;
 		width: 35%;
 		z-index: 500;
+		left: 0;
 	}
 	.task_tag_container li {
 		cursor: pointer;
@@ -458,6 +473,7 @@
 	}
 	.task_id { display: none; }
 	.task_time { display: none; }
+	.task_expiry { display: none; }
 	.author_id { display: none; }
 	
 	.task_validation { 
@@ -470,7 +486,7 @@
 	.task_top {
 		background: #C74433;
 		display: block;
-		height: 100%;
+		height: 50px;
 		left: 0;
 		position: absolute;
 		top: 0;
@@ -711,4 +727,47 @@
 		height: 50px;
 		background: #C74433;
 		width: 100%;
+	}
+
+	/* Date picker */
+	.ui-datepicker {
+		background: white;
+		border: 1px solid #E5E5E5;
+		padding: 10px;
+		font-size: 13px;
+		color: #222;
+	}
+	.ui-datepicker-header {
+		padding-bottom: 10px;
+	}
+	.ui-datepicker-prev {
+		position: absolute;
+		cursor: pointer;
+		left: 10px;
+	}
+	.ui-datepicker-next {
+		position: absolute;
+		cursor: pointer;
+		right: 10px;
+	}
+	.ui-datepicker-title {
+		text-align: center;
+	}
+	.ui-datepicker-calendar {
+		font-size: 13px;
+	}
+	.ui-datepicker-calendar td {
+		text-align: center;
+		width: 25px;
+		height: 20px;
+	}
+	.ui-datepicker-calendar a {
+		text-decoration: none;
+		color: #555;
+	}
+	.ui-datepicker-calendar td:hover {
+		background: #f5f5f5;
+	}
+	.ui-datepicker-unselectable {
+		color: #d5d5d5;
 	}

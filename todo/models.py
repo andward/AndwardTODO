@@ -10,6 +10,8 @@ class Task(models.Model):
     tag = models.CharField(max_length=100)
     status = models.IntegerField()
     time = models.DateTimeField()
+    expiry = models.DateTimeField()
+    expiry_status = models.BooleanField()
 
 
 class Comment(models.Model):

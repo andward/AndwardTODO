@@ -11,12 +11,13 @@
 		</div>
 		<div class="task_list_top" id='debug-top-task'>
 			{% for item in task_top %}
-				<li class='task_li'>
+				<li class='task_li' style="{% if item.expiry_status == 1 %}background:#f5f5f5{% endif %}">
 					<div class="task_todo"></div>
 					<div class="task_top"></div>
 					<div class="task_container">
 						<span class="task_id">{{item.id}}</span>
 						<span class="task_time">{{item.time|date:"d M Y"}}</span>
+						<span class="task_expiry">{{item.expiry|date:"d M Y"}}</span>
 						<div class="task_tag circle"><span>{{item.tag}}</span></div>
 						<span class="task_author">{{item.name}}</span>
 						<span class="task_content">{{item.task}}</span>
@@ -27,12 +28,13 @@
 		</div>
 		<div class="task_list_todo" id='debug-todo-task'>
 			{% for item in task_todo %}
-				<li class="task_li">
+				<li class='task_li' style="{% if item.expiry_status == 1 %}background:#f5f5f5{% endif %}">
 					<div class="task_todo"></div>
 					<div class="task_to_top"></div>
 					<div class="task_container">
 						<span class="task_id">{{item.id}}</span>
 						<span class="task_time">{{item.time|date:"d M Y"}}</span>
+						<span class="task_expiry">{{item.expiry|date:"d M Y"}}</span>
 						<div class="task_tag circle"><span>{{item.tag}}</span></div>
 						<span class="task_author">{{item.name}}</span>
 						<span class="task_content">{{item.task}}</span>
@@ -49,7 +51,7 @@
 		</div>
 		<div class="task_list_done" id='debug-done-task'>
 			{% for item in task_done %}
-				<li class="task_li">
+				<li class='task_li'>
 					<div class="task_done"></div>
 					<div class="task_container">
 						<span class="task_id">{{item.id}}</span>
@@ -121,6 +123,7 @@
 		<div class='comment_task_container'>
 			<span class='tag_in_comment'></span>
 			<span class='time_in_comment'></span>
+			<span class='expiry_in_comment'></span>
 		</div>
 		<div class='comment_task_detail'></div>
 		<div>
@@ -157,6 +160,7 @@
 		<textarea placeholder='Add a task...'></textarea>
 		<div class='task_tag_area'>
 			<input placeholder='Add a tag...' id='tag' autocomplete="off">
+			<input placeholder='Add expiry date...' id='datepicker'>
 			<div class='task_tag_container'>
 				<ul>
 					{% for item in task_tag %}

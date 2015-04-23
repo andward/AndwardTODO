@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from notification import *
+import datetime
 
 
 
@@ -70,7 +71,8 @@ def getTask(request, url_type, type_name=None):
                                'user_summary': user_summary,
                                'task_tag': getFullTagList(),
                                'users': task_users,
-                               'current_user': username},
+                               'current_user': username
+                               },
                                context_instance=RequestContext(request)
                               )
 
@@ -108,12 +110,15 @@ def addNewTask(request, url_type=None, type_name=None):
     username = request.user.username
     new_task = request.POST.get("task", "")
     tag = request.POST.get("task_tag", "")
+    expiry = request.POST.get("expiry_date", "")
     if dataValidator(new_task):
         p = Task(task=new_task,
                  name=username,
                  tag=tag,
                  status=0,
-                 time=timeStamp()
+                 time=timeStamp(),
+                 expiry=datetime.datetime.strptime(expiry, "%m/%d/%Y"),
+                 expiry_status=0
                  )
         p.save()
         # taskEmailNotification(request=request, todo=new_task)
@@ -126,6 +131,7 @@ def addNewTask(request, url_type=None, type_name=None):
             "task": new_task,
             "tag": tag,
             "time": p.time.strftime('%d %b %Y'),
+            "expiry": p.expiry.strftime('%d %b %Y'),
             "name": username,
             "new_tag": new_tag
         }))
@@ -146,6 +152,7 @@ def broadcastNewTask(request, url_type=None, type_name=None):
             "task": item.task,
             "tag": item.tag,
             "time": item.time.strftime('%d %b %Y'),
+            "expiry": item.expiry.strftime('%d %b %Y'),
             "name": item.name,
             "new_tag": 0
         } for item in tasks]))
