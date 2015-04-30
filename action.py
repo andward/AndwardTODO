@@ -24,10 +24,13 @@ def httpMethod(request, *args, **kwargs):
     # Http method separate by POST and GET
     get = kwargs.pop('GET', None)
     post = kwargs.pop('POST', None)
+    put = kwargs.pop('PUT', None)
     if request.method == 'GET' and get is not None:
         return get(request, *args, **kwargs)
     elif request.method == 'POST' and post is not None:
         return post(request, *args, **kwargs)
+    elif request.method == 'PUT' and put is not None:
+        return put(request, *args, **kwargs)
     raise Http404
 
 
@@ -46,7 +49,7 @@ def modelValidator(func):
 
 def dataValidator(data):
     # Validate data if empty
-    if type(data) is str:          
+    if type(data) is str:         
         if str(data).strip() == '':
             return False
         else:

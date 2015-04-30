@@ -105,9 +105,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
     'todo',
     'django_socketio',
     'django_crontab',
+    'rest_framework',
 
 
 
