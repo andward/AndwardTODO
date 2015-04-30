@@ -32,7 +32,7 @@ DATABASES = {
         'PORT': '3306',<br />                
     }
 }
-<code>
+</code>
 
 ##Go to project folder and sync database
 
@@ -41,9 +41,9 @@ DATABASES = {
 
 ## Start local server
 <code>python manage.py runserver</code>
+<code>python manage.py runserver_socketio localhost:9000</code>
 
-Then, run http://127.0.0.1:8000/task/tag/ALL, you will see the UI.
-
+Run http://127.0.0.1:8000/task/tag/ALL. You will see the UI.
 
 
 
