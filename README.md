@@ -40,7 +40,7 @@ DATABASES = {
 <code>python manage.py syncdb</code>
 
 ## Start local server
-<code>python manage.py runserver</code>
+<code>python manage.py runserver --nostatic</code>
 <code>python manage.py runserver_socketio localhost:9000</code>
 
 Run http://127.0.0.1:8000/task/tag/ALL. You will see the UI.
