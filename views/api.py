@@ -1,9 +1,10 @@
 from django.views.decorators.csrf import csrf_exempt
 from todo.models import Task, Comment
-from todo.serializers import taskSerializer, commentSerializer
+from todo.serializers import taskSerializer, commentSerializer, tagSeralizer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+import datetime
 
 
 TASK_STATUS = {
@@ -21,13 +22,23 @@ def taskList(request, status_filter=None):
         tasks = Task.objects.all()
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    serializer = taskSerializer(tasks, many=True)
+    serializer = taskSerializer(tasks.order_by("-id"), many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def tagList(request):
+    tags = Task.objects.values("tag").distinct()
+    serializer = tagSeralizer(tags, many=True)
+    return Response(serializer.data)
 
 @csrf_exempt
 @api_view(['POST'])
 def createTask(request, status_filter=None):
+    created_time = datetime.datetime.now()
+    request.data['time'] = created_time
+    request.data['expiry'] = created_time
+    request.data['status'] = 0
+    request.data['expiry_status'] = 0
     serializer = taskSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -74,6 +85,8 @@ def commentList(request, task_id=None):
 @csrf_exempt
 @api_view(['POST'])
 def createComment(request, task_id=None):
+    created_time = datetime.datetime.now()
+    request.data['time'] = created_time
     serializer = commentSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

@@ -3,6 +3,7 @@ from models import Task, Comment
 
 
 class taskSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     task = serializers.CharField(max_length=5000)
     name = serializers.CharField(max_length=50)
     tag = serializers.CharField(max_length=100)
@@ -27,6 +28,7 @@ class taskSerializer(serializers.Serializer):
 
 
 class commentSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     mark = serializers.CharField(max_length=10)
     comment = serializers.CharField(max_length=1000)
     name = serializers.CharField(max_length=50)
@@ -42,3 +44,6 @@ class commentSerializer(serializers.Serializer):
         comment.time = validated_data.get('time', comment.time)
         comment.save()
         return comment
+
+class tagSeralizer(serializers.Serializer):
+    tag = serializers.CharField(max_length=100)

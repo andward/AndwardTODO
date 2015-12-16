@@ -38,7 +38,9 @@ urlpatterns += patterns('',
                         (r'api/task/(.*)$', httpMethod, {
                             'GET': api.taskDetail,
                             'PUT': api.updateTask}),
-                        (r'api/comment/(.*)$', httpMethod, {
+                        (r'api/comments/(.*)$', httpMethod, {
                             'GET': api.commentList,
                             'POST': api.createComment}),
+                        (r'api/tags$', httpMethod, {
+                            'GET': api.tagList}),
                         )
