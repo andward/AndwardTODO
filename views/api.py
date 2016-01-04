@@ -1,9 +1,12 @@
 from django.views.decorators.csrf import csrf_exempt
 from todo.models import Task, Comment
-from todo.serializers import taskSerializer, commentSerializer, tagSeralizer
+from todo.serializers import taskSerializer, commentSerializer, tagSeralizer, userSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from django.contrib.auth.models import User
 import datetime
 
 
@@ -13,8 +16,20 @@ TASK_STATUS = {
     'done': 1
 }
 
+@api_view(['POST'])
+def createUser(request):
+    user = User.objects.create_user(
+        username=request['username'],
+        email=request['username'])
+    user.set_password(request['password'])
+    user.save()
+    serializer = userSerializer(user)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def taskList(request, status_filter=None):
     if status_filter and status_filter in TASK_STATUS.keys():
         tasks = Task.objects.filter(status=TASK_STATUS[status_filter])
@@ -25,14 +40,19 @@ def taskList(request, status_filter=None):
     serializer = taskSerializer(tasks.order_by("-id"), many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def tagList(request):
     tags = Task.objects.values("tag").distinct()
     serializer = tagSeralizer(tags, many=True)
     return Response(serializer.data)
 
-@csrf_exempt
+
 @api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def createTask(request, status_filter=None):
     created_time = datetime.datetime.now()
     request.data['time'] = created_time
@@ -47,6 +67,8 @@ def createTask(request, status_filter=None):
 
 
 @api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def taskDetail(request, task_id):
     try:
         task = Task.objects.get(id=int(task_id))
@@ -57,6 +79,8 @@ def taskDetail(request, task_id):
 
 
 @api_view(['PUT'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def updateTask(request, task_id):
     try:
         task = Task.objects.get(id=int(task_id))
@@ -71,6 +95,8 @@ def updateTask(request, task_id):
 
 
 @api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def commentList(request, task_id=None):
     if task_id:
         comments = Comment.objects.filter(mark=task_id)
@@ -82,8 +108,9 @@ def commentList(request, task_id=None):
     return Response(serializer.data)
 
 
-@csrf_exempt
 @api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def createComment(request, task_id=None):
     created_time = datetime.datetime.now()
     request.data['time'] = created_time

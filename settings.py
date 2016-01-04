@@ -36,7 +36,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'todo',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': 'your password',                  # Not used with sqlite3.
+        'PASSWORD': '86112233',                  # Not used with sqlite3.
         'HOST': 'localhost',     # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -105,13 +105,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    # 'django.contrib.staticfiles',
     'todo',
     'django_socketio',
     'django_crontab',
     'rest_framework',
-
-
+    'rest_framework.authtoken',
+    'south',
 
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
@@ -142,3 +142,12 @@ SOCKETIO_PORT = 9000
 CRONJOBS = [
     ('0 0 * * *', 'AndwardTODO.cron.checkTaskExpiration')
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',),
+}

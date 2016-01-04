@@ -7,6 +7,7 @@ from action import *
 from todo.models import *
 import django.contrib.auth
 from django.contrib import admin
+from rest_framework.authtoken import views
 
 admin.autodiscover()
 
@@ -43,4 +44,7 @@ urlpatterns += patterns('',
                             'POST': api.createComment}),
                         (r'api/tags$', httpMethod, {
                             'GET': api.tagList}),
+                        (r'api/createuser$', httpMethod, {
+                            'POST': api.createUser}),
+                        (r'^api/token-auth$', views.obtain_auth_token),
                         )
